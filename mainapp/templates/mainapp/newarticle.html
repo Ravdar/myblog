@@ -1,0 +1,11 @@
+{% extends "mainapp/base.html" %}
+
+{% block content %}
+<h1>Write new article:</h1>
+<form method="post" action="/new/" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form.media}}
+    {{form.as_p}}
+    <button type="submit" , name="save">Submit</button>
+</form>
+{% endblock %}

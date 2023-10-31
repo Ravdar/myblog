@@ -1,0 +1,51 @@
+<html>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+</style>
+
+<head>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+</head>
+<div id="logo">
+    <img src="/media/images/crate_bar.png">
+    {% if request.resolver_match.url_name == 'home_view_pl' or request.resolver_match.url_name == 'article_view_url' %}
+    <a href="{% url 'mainapp:home_view_pl' %}"><img src="/media/images/logo.png" alt="logo"></a>
+    {% else %}
+    <a href="{% url 'mainapp:home_view' %}"><img src="/media/images/logo.png" alt="logo"></a>
+    {% endif %}
+</div>
+{% if user.is_superuser %}
+<a href="{% url 'mainapp:new_article' %}"><button type="button">New article</button></a>
+{% endif %}
+<div id="main-container">
+    <div id="second-container">
+        {% block content %}
+        {% for article in list_of_articles %}
+        {% if article.url != None %}
+        {% if article.article_image %}
+        <a href="{% url 'mainapp:article_view_url' article.url %}"><img src="{{article.article_image.url }}"
+                id="article-image"></a>
+        {% endif %}
+        <p id="publication-date-label">{{article.publication_date}}</p>
+        <h1 id="article-titles"><a href="{% url 'mainapp:article_view_url' article.url %}">{{article.title}}</a>
+            {% else %}
+            {% if article.article_image %}
+            <a href="{% url 'mainapp:article_view_url' article.id %}"><img src="{{article.article_image.url }}"
+                    id="article-image"></a>
+            {% endif %}
+            <p id="publication-date-label">{{article.publication_date}}</p>
+            <h1 id="article-titles"><a href="{% url 'mainapp:article_view_url' article.id %}">{{article.title}}</a>
+                {% endif %}
+            </h1>
+            {% endfor %}
+            {% endblock %}
+    </div>
+</div>
+
+
+</html>

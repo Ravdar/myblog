@@ -1,0 +1,41 @@
+{% extends "mainapp/base.html" %}
+
+{% block content %}
+<div id="main-container">
+    <div id="second-container">
+        {% if article.article_image %}
+        <img src="{{article.article_image.url }}" id="article-image">
+        {% endif %}
+        <p>Published: {{article.publication_date}}
+            {% if article.last_edit_date != None %}
+            Last edit: {{article.last_edit_date}}
+            {% endif %}
+        </p>
+        <h1>{{article.title}}</h1>
+        <p>{{article.body|safe}}</p>
+        {% if user.is_superuser %}
+        <a href="{%url 'mainapp:edit_article' article.id %}"><button type="button">Edit</button></a>
+        <a href="{%url 'mainapp:delete_article' article.id %}"><button type="button">Delete</button></a>
+        {% endif %}
+    </div>
+    <br>
+    <br>
+    <div id="second-container">
+        <h3>Comments section</h3>
+        {% for comment in comments %}
+        <p> {{comment.publication_date}}
+            {% if comment.author == "ravdar (op)" %}
+            <span style="color: orangered; font-weight: bold;">{{ comment.author }}</span>
+            {% else %}
+            {{ comment.author }}
+            {% endif %}
+        <p>{{comment.text}}</p>
+        {% endfor %}
+        <form method="post">
+            {% csrf_token %}
+            {{form.as_p}}
+            <button type="submit" , name="save">Submit</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
